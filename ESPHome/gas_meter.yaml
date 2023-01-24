@@ -1,5 +1,5 @@
 esphome:
-  name: gaszaehler
+  name: gas_meter
 
 esp8266:
   board: d1_mini
@@ -24,7 +24,7 @@ api:
             value: !lambda 'return counter_pulses;'
 
 ota:
-  password: ""
+  password: "xxxx"
 
 wifi:
   ssid: "xxxxx"
