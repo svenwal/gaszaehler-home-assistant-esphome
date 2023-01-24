@@ -50,7 +50,7 @@ For this guide I assume you have also installed ESPHome locally on your computer
 
 If this is the case we can now move in the shell into the subfolder [./esphome] in this repository and start customizing the file `gas_meter.yaml` to your needs.
 
-## The YAML files in details
+## The YAML file in details
 
 I have added the 📝 symbol every time when you need to adjust a parameter to your needs.
 
@@ -151,6 +151,8 @@ globals:
 ```
 
 This is the actual variable which stores and updates the gas meter value. Note it is based on pulses where are 1/100 of the value. So the above example actually represents `14650,46`.
+
+📝 Set the initial value to the value you have read from the gas meter.
 
 The parameter `restore_value` tells the ESP8266 to restore the value from the flash memory after a power outage. This is the corresponding change to the above `restore_from_flash` and tells the ESPHome that this variable should be stored in the flash memory.
 
