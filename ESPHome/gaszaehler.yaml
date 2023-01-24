@@ -1,0 +1,76 @@
+esphome:
+  name: gaszaehler
+
+esp8266:
+  board: d1_mini
+  restore_from_flash: true
+
+preferences:
+  flash_write_interval: 5min
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "xxxxx"
+  services:
+    - service: update_counter_pulses
+      variables:
+        counter_pulses: int
+      then:
+        - globals.set:
+            id: pulses_sum
+            value: !lambda 'return counter_pulses;'
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "xxxxx"
+  password: "xxxxxxx"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Gaszaehler Fallback Hotspot"
+    password: "xxxxxxxx"
+
+captive_portal:
+    
+globals:
+  - id: pulses_sum
+    type: int
+    restore_value: yes
+    initial_value: '1460546'  # hier kann der Gaszählerstand initialisiert werden
+binary_sensor:
+  - platform: gpio
+    id: internal_pulse_counter
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+    name: "Live-Impuls"
+    filters:
+      - delayed_on: 10ms
+    on_press:
+      then:
+        - lambda: id(pulses_sum) += 1;
+#        - output.turn_off: led  # optional: für eine LED, die den Gaszählerpuls visualisiert
+#    on_release:
+#      then:
+#        - output.turn_on: led  # optional: für eine LED, die den Gaszählerpuls visualisiert
+sensor:
+  - platform: template
+    name: "Gasverbrauch"
+    device_class: gas
+    unit_of_measurement: "m³"
+    state_class: "total_increasing"
+    icon: "mdi:fire"
+    accuracy_decimals: 2
+    lambda: |-
+      return id(pulses_sum) * 0.01;
+
+# Optional: Diese LED soll blinken, sobald ein Signal vom Gaszähler erkannt wird
+#output:
+#  - platform: gpio
+#    pin: GPIO0
+#    id: 'led'
