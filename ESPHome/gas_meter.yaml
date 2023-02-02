@@ -13,7 +13,8 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: "xxxxx"
+  encryption:
+    key: bbrd2e5Lz/6q43mdcyChKFbVUcnAvCzEuNptw77XZKw=
   services:
     - service: update_counter_pulses
       variables:

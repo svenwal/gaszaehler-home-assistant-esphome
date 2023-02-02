@@ -88,12 +88,13 @@ Here we simply enable logging - you can later connect to the device and see what
 
 ```yaml
 api:
-  password: "xxxxx"
+  encryption:
+    key: bbrd2e5Lz/6q43mdcyChKFbVUcnAvCzEuNptw77XZKw=
 ```
 
-This enables the API which will be used for the connection between the ESP8266 and Home Assistant. The password is the password you will need to enter in Home Assistant to connect to the device. 
+This enables the API which will be used for the connection between the ESP8266 and Home Assistant. The key is the shared secred you will need to enter in Home Assistant to connect to the device. 
 
-📝 Set the password and remember it for later usage in `Home Assistant`.
+📝 Set / change the key (you can generate a random one [at the ESPHome documentation page](https://esphome.io/components/api.html)) and remember it for later usage in `Home Assistant`.
 
 ```yaml
   services:
