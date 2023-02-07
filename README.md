@@ -191,4 +191,18 @@ This final section declares the sensor as being detected by Home Assistant when 
 
 # Flashing the ESP8266
 
-TBD
+As described I am describing the process of flashing the ESP8266 using my Mac where I have installed esphome locally using homebrew. The general work using the command line is described at the [ESPHome documentation page](https://esphome.io/guides/getting_started_command_line.html).
+
+So we now plug the Micro-USB-cable into the ESP8266 and the Mac and make sure we are in the folder where the above YAML file is located.
+
+Flashing now is as easy as
+
+```bash
+esphome log gas_meter.yaml
+```
+
+After some compiling output you'll get promepted to choose the device where the ESP8266 is connected to. Assuming you only have one connected there should normally be only one option.
+
+When the initial flash is done you can disconnect it from your Mac and connect it to an external USB power next to your gas meter. If you have entered the correct WIFI credentials it should connect to your WiFi network and you should see the device in your Home Assistant as new integration to be configured.
+
+Also you don't need to connect it to your Mac again to update the firmware. You can do this over the air (OTA) using the same command as above.
