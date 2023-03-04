@@ -193,7 +193,7 @@ This final section declares the sensor as being detected by Home Assistant when 
 
 As described I am describing the process of flashing the ESP8266 using my Mac where I have installed esphome locally using homebrew. The general work using the command line is described at the [ESPHome documentation page](https://esphome.io/guides/getting_started_command_line.html).
 
-So we now plug the Micro-USB-cable into the ESP8266 and the Mac and make sure we are in the folder where the above YAML file is located.
+We plug the Micro-USB-cable into the ESP8266 and the Mac. Next is to make sure we are in the folder where the above YAML file is located.
 
 Flashing now is as easy as
 
@@ -206,3 +206,13 @@ After some compiling output you'll get promepted to choose the device where the 
 When the initial flash is done you can disconnect it from your Mac and connect it to an external USB power next to your gas meter. If you have entered the correct WIFI credentials it should connect to your WiFi network and you should see the device in your Home Assistant as new integration to be configured.
 
 Also you don't need to connect it to your Mac again to update the firmware. You can do this over the air (OTA) using the same command as above.
+
+# Home Assistant
+
+## Initial setup
+
+Based on my experience Home Assistant is going to detect the sensor automatically within a few minutes. If this has happened you can navigate to Settings > Integrations and search for "Gas meter" (or however you have named it in the YAML file). You should see the device there. Click on it and you will be asked to enter the API key you have set in the YAML file.
+
+## Energy dashboard
+
+Now that the sensor is known to Home Assistant we can use it in the energy dashboard. Navigate to Energy and click on the "+" button to add a new device. You should see the sensor there. Click on it and you will be asked to enter the unit of measurement. This is "m³" in our case. Click on "Create" and you are done.
