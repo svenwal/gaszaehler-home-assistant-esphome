@@ -2,7 +2,7 @@
 
 In this repo I am going to document my setup for reading my gas meter using a ESP8266 and a reed sensor and display it in Home Assistant.
 
-It is based on [this blog post by Benni](https://be-jo.net/2022/02/home-assistant-gaszaehler-mit-esphome-auslesen-flashen-unter-wsl/) translating it to English, adding some more details on the overall setup and extending it with (for me) important features.
+It is based on [this blog post by Benni](https://be-jo.net/2022/02/home-assistant-gaszaehler-mit-esphome-auslesen-flashen-unter-wsl/) translating it to English, adding some more details on the overall setup and extending it by some (for me) important features.
 
 First of all let's have a look at what we want to achieve:
 
@@ -14,19 +14,19 @@ First of all let's have a look at what we want to achieve:
 
 ## Home Assistant
 
-If you don't have a running installation of Home Assistant you will need some hardware to run it on. There are many options [as described on this page](https://www.home-assistant.io/installation/) but be aware it should be a 24/7 running machine so most people are either running it on a Raspberry Pi or a NUC. I am running it on a Raspberry Pi 3 (and will upgrade to a 4 the moment they get back to normal prices).
+If you don't have a running installation of Home Assistant you will need some hardware to run it on. There are many options [as described on this page](https://www.home-assistant.io/installation/) but be aware it should be a 24/7 running machine so most people are either running it on a Raspberry Pi or a NUC. I am running it on a Raspberry Pi 4.
 
 ## The sensor
 
-The sensor is based on a ES2866 board which you can get from many source incl. Amazon. Be aware there are many, many replicas in the market, I personally have chosen [this D1 Mini](https://www.amazon.de/dp/B0754N794H?psc=1&ref=ppx_yo2ov_dt_b_product_details).
+The sensor is based on a ES2866 board which you can get from many source incl. Amazon. Be aware there are many, many replicas available in the wild, I personally have chosen [this D1 Mini](https://www.amazon.de/dp/B0754N794H?psc=1&ref=ppx_yo2ov_dt_b_product_details).
 
-Next to this you need a so called reed sensor which is going to react on the actual gas meter which has an electromagnet inside.
+Second you need a so called reed sensor which is going to react on the actual gas meter which has an electromagnet inside. You get them for a few cents from Amazon as well.
 
 Next you need an USB power source (USB micro if you choose the same D1 Mini as I did).
 
 Finally some short electronic cables and a soldering iron.
 
-So the costs of the ESP8266 and the reed sensor are below 10€ in total.
+The costs of the ESP8266 and the reed sensor are below 10€ in total.
 
 ## Optional: a nice case
 
@@ -44,7 +44,7 @@ Flashing an ESP8266 with ESPHome is very easy and multiple ways exist depending 
 
 I am not using the [Home Assistant Addon](https://www.home-assistant.io/addons/esphome/) which is the easiest way to get started but instead did all the work on my laptop (MacBook Pro) where I have installed `esphome` using [Homebrew](https://brew.sh/) with `brew install esphome`.
 
-Whatever way you choose for the very first initial flash the ESP8266 needs to be connect to your computer using a USB micro cable.
+Whatever way you choose for the very first initial flash the ESP8266 needs to be connected to your computer using a USB micro cable.
 
 For this guide I assume you have also installed ESPHome locally on your computer and the ESP8266 is connected to your computer.
 
@@ -77,7 +77,7 @@ preferences:
 
 This is the first change to the above linked blog post: it tells the ESPHome to store some variables (which will be defined later) in its (very limited) internal flash memory. Because of this I can power off the ESP8266 and it will still remember the last value of the gas meter.
 
-The flash on this board is (according what I have read) not very reliable so I have set the interval to only 5 minutes. Still often enough so difference if the power is disconnected will be minimal and the flash should be OK for a long time (I hope - otherwise I will have to invest another 5 EUR in a new board).
+The flash on this board is (according to what I have read) not very reliable so I have set the interval to 5 minutes. Still often enough so difference if the power is disconnected will be minimal and the flash should be OK for a long time (I hope - otherwise I will have to invest another 5 EUR in a new board).
 
 ```yaml
 # Enable logging
@@ -92,7 +92,7 @@ api:
     key: bbrd2e5Lz/6q43mdcyChKFbVUcnAvCzEuNptw77XZKw=
 ```
 
-This enables the API which will be used for the connection between the ESP8266 and Home Assistant. The key is the shared secred you will need to enter in Home Assistant to connect to the device. 
+This enables the API which will be used for the connection between the ESP8266 and Home Assistant. The key is the shared secret you will need to enter in Home Assistant to connect to the device. 
 
 📝 Set / change the key (you can generate a random one [at the ESPHome documentation page](https://esphome.io/components/api.html)) and remember it for later usage in `Home Assistant`.
 
@@ -116,7 +116,7 @@ ota:
   password: "xxxx"
 ```
 
-ESPHome comes with the phantastic option to update the firmware over the air (OTA) after the initial flash is completed using USB. This password will protect your device against unwanted updates.
+ESPHome comes with the phantastic option to update the firmware over the air (OTA) after the initial flash is completed using USB. This password will protect your device against unauthorized updates.
 
 📝 Set the password.
 
@@ -137,7 +137,7 @@ The first section is about how the ESP8266 should connect to your WiFi network. 
 
 📝 Set SSID and the password 
 
-In case you mistyped the credentials or it is not reachable out of other reasons the ESP8266 will create a fallback WiFi network which you can connect to and configure it again without needing to connect it via USB again.
+In case you mistyped your Wifi credentials or it is not reachable out of other reasons the ESP8266 will create a fallback WiFi network which you can connect to and configure it again without needing to connect it via USB again.
 
 📝 Set the password 
 
@@ -151,11 +151,11 @@ globals:
     initial_value: '1460546'  # here we can intialize the value to the value we have read from the gas meter.
 ```
 
-This is the actual variable which stores and updates the gas meter value. Note it is based on pulses where are 1/100 of the value. So the above example actually represents `14650,46`.
+This is the actual variable which stores and updates the gas meter value. Note it is based on pulses which are 1/100 of the value. So the above example actually represents `14650,46`.
 
 📝 Set the initial value to the value you have read from the gas meter.
 
-The parameter `restore_value` tells the ESP8266 to restore the value from the flash memory after a power outage. This is the corresponding change to the above `restore_from_flash` and tells the ESPHome that this variable should be stored in the flash memory.
+The parameter `restore_value` tells the ESP8266 to restore the value from the flash memory after a power outage. This is the corresponding change to the above `restore_from_flash` above and tells the ESPHome that this variable should be stored in the flash memory.
 
 ```yaml
 binary_sensor:
@@ -191,17 +191,17 @@ This final section declares the sensor as being detected by Home Assistant when 
 
 # Flashing the ESP8266
 
-As described I am describing the process of flashing the ESP8266 using my Mac where I have installed esphome locally using homebrew. The general work using the command line is described at the [ESPHome documentation page](https://esphome.io/guides/getting_started_command_line.html).
+As mentioned I am describing the process of flashing the ESP8266 using my Mac where I have installed esphome locally using homebrew. The general work using the command line is described at the [ESPHome documentation page](https://esphome.io/guides/getting_started_command_line.html).
 
 We plug the Micro-USB-cable into the ESP8266 and the Mac. Next is to make sure we are in the folder where the above YAML file is located.
 
 Flashing now is as easy as
 
 ```bash
-esphome log gas_meter.yaml
+esphome run gas_meter.yaml
 ```
 
-After some compiling output you'll get promepted to choose the device where the ESP8266 is connected to. Assuming you only have one connected there should normally be only one option.
+After some lines of compiling output you'll get prompted to choose the device where the ESP8266 is connected to. Assuming you only have one connected there should normally be only one option.
 
 When the initial flash is done you can disconnect it from your Mac and connect it to an external USB power next to your gas meter. If you have entered the correct WIFI credentials it should connect to your WiFi network and you should see the device in your Home Assistant as new integration to be configured.
 
@@ -211,8 +211,16 @@ Also you don't need to connect it to your Mac again to update the firmware. You 
 
 ## Initial setup
 
-Based on my experience Home Assistant is going to detect the sensor automatically within a few minutes. If this has happened you can navigate to Settings > Integrations and search for "Gas meter" (or however you have named it in the YAML file). You should see the device there. Click on it and you will be asked to enter the API key you have set in the YAML file.
+Based on my experience Home Assistant is going to detect the sensor automatically within a few minutes. If this has happened you can navigate to `Settings` > `Integrations` and search for "Gas meter" (or however you have named it in the YAML file). You should see the device there. Click on it and you will be asked to enter the API key you have set in the YAML file.
 
 ## Energy dashboard
 
-Now that the sensor is known to Home Assistant we can use it in the energy dashboard. Navigate to Energy and click on the "+" button to add a new device. You should see the sensor there. Click on it and you will be asked to enter the unit of measurement. This is "m³" in our case. Click on "Create" and you are done.
+Now that the sensor is known to Home Assistant we can use it in the energy dashboard. Navigate to `Energy` and click on the "+" button to add a new device. You should see the sensor there. Click on it and you will be asked to enter the unit of measurement. This is `m³` in our case. Click on "Create" and you are done.
+
+## Updating the value on the fly
+
+After a power outage our any other reason why the counter is not correct anymore (personally my first duct tape simply fell off ;)) you can update the value on the fly using a service call.
+
+To do so navigate to `Developer Tools` > `Services` and search for `update_counter_pulses`. You will be asked to enter the number of pulses. This is the number you read from the gas meter. For example the value might be `1460546` - remember the two digits - so this represents `14605,46`. Click on `Call service` button and you are done.
+
+![Updating the pulses on the fly](images/update_pulses_in_homeassistant.jpg)
