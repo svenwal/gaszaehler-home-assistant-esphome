@@ -38,6 +38,8 @@ The one single place where you have to use your soldering iron is the wiring of 
 
 The reed sensor comes with two legs which need to be solded to the pins G (Ground) and D1 (GPIO5) on the ESP8266 board.
 
+![Wiring the reed sensor](images/soldering_reed_sensor.jpg)
+
 # Flashing the ESP8266
 
 Flashing an ESP8266 with ESPHome is very easy and multiple ways exist depending where you have installed ESPHome.
