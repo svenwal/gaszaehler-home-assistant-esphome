@@ -10,11 +10,16 @@ preferences:
 
 # Enable logging
 logger:
+  level: DEBUG
+  initial_level: INFO
+  logs:
+    mqtt.component: WARN
+    mqtt.client: ERROR
 
 # Enable Home Assistant API
 api:
   encryption:
-    key: bbrd2e5Lz/6q43mdcyChKFbVUcnAvCzEuNptw77XZKw=
+    key: xxxYourKey
   services:
     - service: update_counter_pulses
       variables:
@@ -26,6 +31,7 @@ api:
 
 ota:
   password: "xxxx"
+  platform: esphome
 
 wifi:
   ssid: "xxxxx"
@@ -37,6 +43,28 @@ wifi:
     password: "xxxxxxxx"
 
 captive_portal:
+
+mqtt:
+  broker: 192.168.x.x
+  username: mqtt_userX
+  password: mqtt_passwordX
+  keepalive: 60s
+  topic_prefix: gasmeter
+  discovery: true
+  on_json_message: #Option/handling of json commands via MQTT
+    topic: gasmeter/set
+    then:
+      - globals.set: # Option to set Gascounter pulses via MQTT. 
+        # Content to set Overall Pulses: {"pulses": 12345678} # Value for 12.3456,78 m³
+          id: pulses_sum
+          value: !lambda |-
+            int temp = id(pulses_sum);
+            if (x["pulses"].is<int>()) {
+              ESP_LOGI("main", "pulses to set: %d", x["pulses"].as<int>()); 
+              temp = x["pulses"].as<int>(); }
+            else
+              ESP_LOGI("main", "incorrect format");
+            return temp;
     
 globals:
   - id: pulses_sum
