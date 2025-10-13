@@ -226,3 +226,7 @@ After a power outage our any other reason why the counter is not correct anymore
 To do so navigate to `Developer Tools` > `Services` and search for `update_counter_pulses`. You will be asked to enter the number of pulses. This is the number you read from the gas meter. For example the value might be `1460546` - remember the two digits - so this represents `14605,46`. Click on `Call service` button and you are done.
 
 ![Updating the pulses on the fly](images/update_pulses_in_homeassistant.jpg)
+
+## MQTT support
+
+With thanks to [@sburgh01](https://github.com/sburgh01) the same can be achieved using MQTT.
